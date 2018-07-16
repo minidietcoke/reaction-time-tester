@@ -18,7 +18,6 @@ class Game extends Component {
     setTimeout(this.goGreen, this.countDown);
   }
 
-
   getTimeElapsed = () => {
     return Date.now() - this.state.start;
   }
@@ -39,11 +38,9 @@ class Game extends Component {
     });
     this.countDown = this.props.randomNumbers.pop();
     setTimeout(this.goGreen, this.countDown);
-    console.log(`restarting with ${Date.now()}, ${this.countDown}, ${this.state.backgroundColor}`);
   }
 
   goGreen = () => {
-    console.log(`COUNTDOWN FINISHED, currently ${this.state.backgroundColor}`);
     this.setState({
       backgroundColor: "green", countDownFinished: 1
     });

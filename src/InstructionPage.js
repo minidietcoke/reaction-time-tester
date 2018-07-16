@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import './index.css';
 import Game from './Game';
 
-// - A random number is fetched using the random.org API, and the app waits for as many seconds
-// - the app displays the result and offers to restart the test
-// -
 const requestBody = {
   "jsonrpc": "2.0",
   "method": "generateIntegers",

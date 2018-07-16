@@ -1,30 +1,9 @@
 import React, { Component } from 'react';
 import './index.css';
 import Game from './Game';
-
-const requestBody = {
-  "jsonrpc": "2.0",
-  "method": "generateIntegers",
-  "params": {
-      "apiKey": "93ff549e-52f3-4a09-bef0-653210839a63",
-      "n": 20,
-      "min": 2000,
-      "max": 7000
-  },
-  "id": 42
-}
+import { fetchRandomNumbers, requestBody } from './shared'
 
 class InstructionPage extends Component {
-  fetchRandomNumbers = fetch('https://api.random.org/json-rpc/1/invoke', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(requestBody)
-  }).then((response) => {
-    return response.json();
-  });
-
   constructor(props) {
     super(props);
     this.state = {
@@ -33,8 +12,12 @@ class InstructionPage extends Component {
       randomNumbers: null
     }
 
-    this.fetchRandomNumbers.then((response) => {
-      this.setState({randomNumbers: response.result.random.data, gameReady: 1})
+    fetchRandomNumbers.then((response) => {
+      this.setState({
+        gameReady: 1,
+      })
+      this.randomNumbers = response.result.random.data,
+
       window.addEventListener("keydown", this.startGame);
     }).catch(function() {
       throw new Error(`Random API call failed with ${JSON.stringify(requestBody)}`);
@@ -46,7 +29,7 @@ class InstructionPage extends Component {
   }
 
   render() {
-    return this.state.gameStarted ? <Game randomNumbers={this.state.randomNumbers} /> : (
+    return this.state.gameStarted ? <Game randomNumbers={this.randomNumbers} /> : (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">How to play</h1>

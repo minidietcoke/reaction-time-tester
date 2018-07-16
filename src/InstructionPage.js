@@ -41,7 +41,7 @@ class InstructionPage extends Component {
       window.addEventListener("keydown", this.startGame);
     }).catch(function() {
       throw new Error(`Random API call failed with ${JSON.stringify(requestBody)}`);
-    });;
+    });
   }
 
   startGame = () => {
@@ -49,8 +49,6 @@ class InstructionPage extends Component {
   }
 
   render() {
-    const loadingText = this.state.gameReady ? "To get started, press any key." : "Loading..."
-
     return this.state.gameStarted ? <Game randomNumbers={this.state.randomNumbers} /> : (
       <div className="App">
         <header className="App-header">
@@ -63,7 +61,7 @@ class InstructionPage extends Component {
           Your results will be displayed after five valid rounds.
         </p>
         <p className="App-intro">
-          {loadingText}
+          {this.state.gameReady ? "To get started, press any key." : "Loading..."}
         </p>
       </div>
     );

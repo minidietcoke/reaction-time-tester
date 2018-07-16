@@ -8,7 +8,6 @@ class Game extends Component {
 
     this.state = {
       backgroundColor: "red",
-      isValid: 1,
       start: Date.now(),
     };
 
@@ -29,15 +28,7 @@ class Game extends Component {
   }
 
   handleKeyDown = () => {
-    const reactionTime = this.timeToReact();
-    console.log(`reaction time ${reactionTime}`)
-    if (reactionTime > 0) {
-      this.scores.push(reactionTime)
-    } else {
-      this.setState({
-       isValid: 0
-     });
-    }
+    this.scores.push(this.timeToReact());
     this.restart();
   }
 
@@ -45,8 +36,6 @@ class Game extends Component {
     this.setState({
       start: Date.now(),
       backgroundColor: "red",
-      countDownFinished: 0,
-      isValid: 1,
     });
     this.countDown = this.props.randomNumbers.pop();
     setTimeout(this.goGreen, this.countDown);
@@ -62,7 +51,7 @@ class Game extends Component {
 
   render() {
     return (
-      <Display backgroundColor={this.state.backgroundColor} isValid={this.state.isValid}/>
+      <Display backgroundColor={this.state.backgroundColor}/>
     )
   }
 }

@@ -12,54 +12,80 @@ class Game extends Component {
       gameFinished: 0,
     };
 
-    this.countDown = this.props.randomNumbers.pop();
     this.inValidTries = 0;
-    this.score = [];
-    this.start = Date.now();
+    this.scores = [];
+    this.testStartTime = null;
     this.validTries = 0;
 
     window.addEventListener("keydown", this.handleKeyDown);
-    setTimeout(this.goGreen, this.countDown);
+
+    this.startTest();
   }
 
-  getTimeElapsed = () => {
-    return Date.now() - this.start;
+  startTest = () => {
+    new Promise((resolve, reject) => {
+      this.countDown = this.props.randomNumbers.pop();
+      console.log(`starting test with countDown: ${this.countDown}`)
+      resolve(this.countDown);
+    }).then((countDown) => {
+      setTimeout(this.goGreen, this.countDown);
+      console.log("Counting down for " + this.countDown);
+    })
   }
 
-  timeToReact = () => {
-    return this.getTimeElapsed() - this.countDown;
+  getReactionTime = () => {
+    return this.testStartTime ? Date.now() - this.testStartTime : 0;
   }
 
   handleGameEnd = () => {
-    console.log("game finished");
     this.setState({gameFinished: 1});
   }
-  handleKeyDown = () => {
-    const timeToReact = this.timeToReact();
-    this.score.push(timeToReact);
 
-    timeToReact > 0 ? this.validTries = this.validTries + 1 : this.inValidTries = this.inValidTries + 1
-    this.validTries < 5 ? this.restart() : this.handleGameEnd()
+  handleKeyDown = () => {
+    if (!this.state.gameFinished) {
+      new Promise((resolve, reject) => {
+        resolve(this.getReactionTime());
+      }).then((timeToReact) => {
+        this.scores.push(timeToReact);
+        return timeToReact;
+      }).then((timeToReact) => {
+        console.log(`timeToReact ${timeToReact}, start: ${this.testStartTime} countdown ${this.countDown}`)
+        timeToReact > 0 ? (this.validTries = this.validTries + 1, console.log("VALID")): this.inValidTries = this.inValidTries + 1
+      }).then(() => {
+        this.validTries < 2 ? this.reset() : this.handleGameEnd()
+      })
+    } else {
+      this.setState({gameFinished: 0});
+      this.restartGame()
+    }
   }
 
-  restart = () => {
+  reset = () => {
     this.setState({
       backgroundColor: "red",
     });
-    this.start = Date.now();
-    this.countDown = this.props.randomNumbers.pop();
-    setTimeout(this.goGreen, this.countDown);
+
+    this.startTest();
+  }
+
+  restartGame = () => {
+    this.inValidTries = 0;
+    this.scores = [];
+    this.testStartTime = null;
+    this.validTries = 0;
+    this.reset();
   }
 
   goGreen = () => {
     this.setState({
-      backgroundColor: "green", countDownFinished: 1
+      backgroundColor: "green"
     });
+    this.testStartTime = Date.now();
   }
 
   render() {
     return this.state.gameFinished ? (
-      <Summary validTries={this.validTries} inValidTries={this.inValidTries} score={this.score}/>
+      <Summary validTries={this.validTries} inValidTries={this.inValidTries} scores={this.scores}/>
     ) : <Display backgroundColor={this.state.backgroundColor} />
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './index.css';
 import Display from './Display'
+import Summary from './Summary'
 
 class Game extends Component {
   constructor(props) {
@@ -8,34 +9,44 @@ class Game extends Component {
 
     this.state = {
       backgroundColor: "red",
-      start: Date.now(),
+      gameFinished: 0,
     };
 
     this.countDown = this.props.randomNumbers.pop();
-    this.scores = [];
+    this.inValidTries = 0;
+    this.score = [];
+    this.start = Date.now();
+    this.validTries = 0;
 
     window.addEventListener("keydown", this.handleKeyDown);
     setTimeout(this.goGreen, this.countDown);
   }
 
   getTimeElapsed = () => {
-    return Date.now() - this.state.start;
+    return Date.now() - this.start;
   }
 
   timeToReact = () => {
     return this.getTimeElapsed() - this.countDown;
   }
 
+  handleGameEnd = () => {
+    console.log("game finished");
+    this.setState({gameFinished: 1});
+  }
   handleKeyDown = () => {
-    this.scores.push(this.timeToReact());
-    this.restart();
+    const timeToReact = this.timeToReact();
+    this.score.push(timeToReact);
+
+    timeToReact > 0 ? this.validTries = this.validTries + 1 : this.inValidTries = this.inValidTries + 1
+    this.validTries < 5 ? this.restart() : this.handleGameEnd()
   }
 
   restart = () => {
     this.setState({
-      start: Date.now(),
       backgroundColor: "red",
     });
+    this.start = Date.now();
     this.countDown = this.props.randomNumbers.pop();
     setTimeout(this.goGreen, this.countDown);
   }
@@ -47,9 +58,9 @@ class Game extends Component {
   }
 
   render() {
-    return (
-      <Display backgroundColor={this.state.backgroundColor}/>
-    )
+    return this.state.gameFinished ? (
+      <Summary validTries={this.validTries} inValidTries={this.inValidTries} score={this.score}/>
+    ) : <Display backgroundColor={this.state.backgroundColor} />
   }
 }
 

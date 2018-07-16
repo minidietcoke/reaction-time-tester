@@ -1,62 +1,69 @@
 import React, { Component } from 'react';
 import './index.css';
+import Display from './Display'
 
 class Game extends Component {
-  state = {
-    valid: 1,
-    countDownFinished: 0,
-    backgroundColour: "red",
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      backgroundColor: "red",
+      isValid: 1,
+      start: Date.now(),
+    };
+
+    this.countDown = this.props.randomNumbers.pop();
+    this.scores = [];
+
+    window.addEventListener("keydown", this.handleKeyDown);
+    setTimeout(this.goGreen, this.countDown);
   }
 
-  countDown = this.props.randomNumbers.pop();
 
-  timeElapsed = () => {
+  getTimeElapsed = () => {
     return Date.now() - this.state.start;
   }
 
   timeToReact = () => {
-    return this.timeElapsed - this.state.countDown;
+    return this.getTimeElapsed() - this.countDown;
+  }
+
+  handleKeyDown = () => {
+    const reactionTime = this.timeToReact();
+    console.log(`reaction time ${reactionTime}`)
+    if (reactionTime > 0) {
+      this.scores.push(reactionTime)
+    } else {
+      this.setState({
+       isValid: 0
+     });
+    }
+    this.restart();
   }
 
   restart = () => {
     this.setState({
       start: Date.now(),
-      backgroundColour: "red",
-      countDownFinished: 0
+      backgroundColor: "red",
+      countDownFinished: 0,
+      isValid: 1,
     });
     this.countDown = this.props.randomNumbers.pop();
     setTimeout(this.goGreen, this.countDown);
-    console.log(`restarting with ${Date.now()}, ${this.countDown}, ${this.backgroundColour}`);
+    console.log(`restarting with ${Date.now()}, ${this.countDown}, ${this.state.backgroundColor}`);
   }
 
   goGreen = () => {
-    console.log(`COUNTDOWN FINISHED, currently ${this.backgroundColour}`);
-    this.setState({backgroundColor: "green", countDownFinished: 1});
-    // console.log(`countdown finished ${this.backgroundColour}`);
-  }
-
-  componentDidMount() {
+    console.log(`COUNTDOWN FINISHED, currently ${this.state.backgroundColor}`);
     this.setState({
-      start: Date.now()
+      backgroundColor: "green", countDownFinished: 1
     });
-    // console.log(`IN GAME`);
-    console.log(`COUNTDOWN ${this.countDown}`);
-    // console.log(Date.now());
-    setTimeout(this.goGreen, this.countDown);
-    window.addEventListener("keydown", this.restart);
   }
 
   render() {
-    console.log(this.backgroundColor);
-    return this.state.countDownFinished ? (
-      <div className="game" style={{backgroundColor: "green"}}>
-      GREEN
-      </div>
-    ):(
-      <div className="game" style={{backgroundColor: "red"}}>
-      RED
-      </div>
-    );
+    return (
+      <Display backgroundColor={this.state.backgroundColor} isValid={this.state.isValid}/>
+    )
   }
 }
 

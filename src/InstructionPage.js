@@ -9,7 +9,7 @@ const requestBody = {
       "apiKey": "93ff549e-52f3-4a09-bef0-653210839a63",
       "n": 20,
       "min": 2000,
-      "max": 10000
+      "max": 7000
   },
   "id": 42
 }

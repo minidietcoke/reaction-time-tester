@@ -32,6 +32,9 @@ class Summary extends Component {
         <p className="App-intro">
           Invalid attempts: {this.props.inValidTries}
         </p>
+        <p className="App-intro" style={{color: "blue"}}>
+          Press any key to retry
+        </p>
       </div>
     )
   }

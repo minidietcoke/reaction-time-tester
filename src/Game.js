@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './index.css';
+import { fetchRandomNumbers, requestBody } from './shared'
 import Display from './Display'
 import Summary from './Summary'
 
@@ -16,6 +17,7 @@ class Game extends Component {
     this.scores = [];
     this.testStartTime = null;
     this.validTries = 0;
+    this.randomNumbers = this.props.randomNumbers;
 
     window.addEventListener("keydown", this.handleKeyDown);
 
@@ -24,8 +26,7 @@ class Game extends Component {
 
   startTest = () => {
     new Promise((resolve, reject) => {
-      this.countDown = this.props.randomNumbers.pop();
-      console.log(`starting test with countDown: ${this.countDown}`)
+      this.countDown = this.randomNumbers.pop();
       resolve(this.countDown);
     }).then((countDown) => {
       setTimeout(this.goGreen, this.countDown);
@@ -49,10 +50,14 @@ class Game extends Component {
         this.scores.push(timeToReact);
         return timeToReact;
       }).then((timeToReact) => {
+<<<<<<< HEAD
         console.log(`timeToReact ${timeToReact}, start: ${this.testStartTime} countdown ${this.countDown}`)
         timeToReact > 0 ? (this.validTries = this.validTries + 1, console.log("VALID")): this.inValidTries = this.inValidTries + 1
+=======
+        timeToReact > 0 ? (this.validTries = this.validTries + 1): this.inValidTries = this.inValidTries + 1
+>>>>>>> 02b3c06... Allow user to continue playing indefinitely.
       }).then(() => {
-        this.validTries < 2 ? this.reset() : this.handleGameEnd()
+        this.validTries < 5 ? this.reset() : this.handleGameEnd()
       })
     } else {
       this.setState({gameFinished: 0});
@@ -65,6 +70,15 @@ class Game extends Component {
       backgroundColor: "red",
     });
 
+    if (this.randomNumbers.length < 5) {
+      fetchRandomNumbers.then((response) => {
+        return response.result.random.data;
+      }).then((response) => {
+        this.randomNumbers = this.randomNumbers.concat(response);
+      }).catch(function() {
+        throw new Error(`Random API call failed with ${JSON.stringify(requestBody)}`);
+      });
+    }
     this.startTest();
   }
 

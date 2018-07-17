@@ -70,6 +70,8 @@ class Game extends Component {
       backgroundColor: "red",
     });
 
+    this.testStartTime = null;
+
     if (this.randomNumbers.length < 5) {
       fetchRandomNumbers.then((response) => {
         return response.result.random.data;

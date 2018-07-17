@@ -12,9 +12,9 @@ class Summary extends Component {
 
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Stats</h1>
+      <div className="Summary">
+        <header>
+          <h1>Stats</h1>
           <hr />
         </header>
         {
@@ -29,10 +29,10 @@ class Summary extends Component {
         <p>
         Average reaction time (ms): {this.average(this.props.scores)}
         </p>
-        <p className="App-intro">
+        <p>
           Invalid attempts: {this.props.inValidTries}
         </p>
-        <p className="App-intro" style={{color: "blue"}}>
+        <p style={{color: "blue"}}>
           Press any key to retry
         </p>
       </div>

@@ -30,17 +30,17 @@ class InstructionPage extends Component {
 
   render() {
     return this.state.gameStarted ? <Game randomNumbers={this.randomNumbers} /> : (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">How to play</h1>
+      <div className="Intro">
+        <header>
+          <h1>How to play</h1>
         </header>
-        <p className="App-intro">
+        <p>
           The screen will be red when you start the game.<br/>
           When the screen turns green, you must tap any key as quickly as possible.<br/>
           If you tap the button before the screen turns green, the round will be invalid.<br/>
           Your results will be displayed after five valid rounds.
         </p>
-        <p className="App-intro">
+        <p>
           {this.state.gameReady ? "To get started, press any key." : "Loading..."}
         </p>
       </div>

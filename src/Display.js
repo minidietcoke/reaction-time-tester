@@ -5,7 +5,6 @@ class Display extends Component {
   render() {
     return (
       <div className="game" style={{backgroundColor: this.props.backgroundColor}}>
-        kjefhlj
       </div>
     )
   }

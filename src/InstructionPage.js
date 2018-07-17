@@ -16,7 +16,7 @@ class InstructionPage extends Component {
       this.setState({
         gameReady: 1,
       })
-      this.randomNumbers = response.result.random.data,
+      this.randomNumbers = response.result.random.data;
 
       window.addEventListener("keydown", this.startGame);
     }).catch(function() {

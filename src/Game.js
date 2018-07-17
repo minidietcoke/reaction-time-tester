@@ -50,12 +50,7 @@ class Game extends Component {
         this.scores.push(timeToReact);
         return timeToReact;
       }).then((timeToReact) => {
-<<<<<<< HEAD
-        console.log(`timeToReact ${timeToReact}, start: ${this.testStartTime} countdown ${this.countDown}`)
-        timeToReact > 0 ? (this.validTries = this.validTries + 1, console.log("VALID")): this.inValidTries = this.inValidTries + 1
-=======
         timeToReact > 0 ? (this.validTries = this.validTries + 1): this.inValidTries = this.inValidTries + 1
->>>>>>> 02b3c06... Allow user to continue playing indefinitely.
       }).then(() => {
         this.validTries < 5 ? this.reset() : this.handleGameEnd()
       })

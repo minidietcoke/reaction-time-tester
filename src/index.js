@@ -5,7 +5,4 @@ import InstructionPage from './InstructionPage';
 
 // ========================================
 
-ReactDOM.render(
-  <InstructionPage />,
-  document.getElementById('root')
-);
+ReactDOM.render(<InstructionPage />, document.getElementById('root'));
